@@ -332,7 +332,7 @@ def recolectar_datos_por_segmentos(browser,fecha):
 #             print(group.head(20))
 #     data_adjusted.reset_index(drop=True, inplace=True)
 #     return data_adjusted
-def corregir_estados_reboot(df, time_margin='1min'):
+def corregir_estados_reboot(df, time_margin='2min'):
     # Convertir el margen de tiempo a Timedelta
     time_margin = pd.Timedelta(time_margin)
     print("######### Corregir estados ##########")
@@ -340,11 +340,17 @@ def corregir_estados_reboot(df, time_margin='1min'):
     # Asegurar que las columnas de fecha son datetime, manejando errores
     df['Fecha Down'] = pd.to_datetime(df['Fecha Down'], errors='coerce')
     df['Fecha Up'] = pd.to_datetime(df['Fecha Up'], errors='coerce')
+    # df['Agencia_base'] = df['Enlace'].apply(lambda x: ' '.join(x.split()[:-2]).lower().replace("backup", "").replace("principal", "").strip())
+    df['Agencia_base'] = df['Enlace'].apply(lambda x: ' '.join(x.split()[:-1])  # Elimina el proveedor (última palabra)
+                                         .replace("Principal", "")          # Elimina la palabra "Principal"
+                                         .replace("Backup", "")             # Elimina la palabra "Backup"
+                                         .strip())                          # Elimina espacios en blanco extras
+    df['Proveedor'] = df['Enlace'].apply(lambda x: x.split()[-1])
     # Crear una copia del DataFrame para realizar ajustes
     data_adjusted = df.copy()
 
     # Agrupar por 'Agencia' o una parte común del nombre que no incluya 'Principal' o 'Backup'
-    df['Agencia_base'] = df['Enlace'].apply(lambda x: ' '.join(x.split()[:-2]).lower().replace("backup", "").replace("principal", "").strip())
+    
 
     for agency, group in df.groupby('Agencia_base'):
         # Filtrar enlaces principales en estado 'reboot', ignorando mayúsculas/minúsculas
