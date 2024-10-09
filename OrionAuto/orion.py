@@ -282,7 +282,7 @@ def recolectar_datos_por_segmentos(browser,fecha):
 
 
 
-# def corregir_estados_reboot(df, time_margin='2min'):
+# def corregir_estados_reboot_ag(df, time_margin='2min'):
 #     """
 #     Corrige los estados en un DataFrame de notificaciones para sincronizar eventos de reboot
 #     en agencias con diferentes proveedores que tengan tiempos de caída y recuperación similares.
@@ -313,8 +313,8 @@ def recolectar_datos_por_segmentos(browser,fecha):
 #         print("###group en for###")
         
 #         if group['Proveedor'].nunique() > 1:  # Más de un proveedor para la misma agencia
-#             print("###Mas de un proveedor para la misma agencia")
-#             print(group.head(20))
+#             #print("###Mas de un proveedor para la misma agencia")
+#             #print(group.head(20))
 #             for i, row in group.iterrows():
 #                 # Buscar entradas similares dentro del grupo
 #                 similar_entries = group[
@@ -327,9 +327,9 @@ def recolectar_datos_por_segmentos(browser,fecha):
 #                 if not similar_entries.empty:
 #                     if 'reboot' in similar_entries['Estado'].values and row['Estado'] != 'reboot':
 #                         data_adjusted.loc[i, 'Estado'] = 'reboot'
-#         else:
-#             print("###Solo un proveedor por agencia##")
-#             print(group.head(20))
+#         #else:
+#             #print("###Solo un proveedor por agencia##")
+#             #print(group.head(20))
 #     data_adjusted.reset_index(drop=True, inplace=True)
 #     return data_adjusted
 def corregir_estados_reboot(df, time_margin='2min'):
@@ -372,17 +372,33 @@ def corregir_estados_reboot(df, time_margin='2min'):
                         fecha_down_backup = backup_row['Fecha Down']
                         fecha_up_backup = backup_row['Fecha Up']
 
-                        # Comparar las fechas de down y up entre el principal y el backup con un margen de tiempo
-                        if (np.abs(fecha_down_principal - fecha_down_backup) <= time_margin) and \
-                           (np.abs(fecha_up_principal - fecha_up_backup) <= time_margin):
+                        # Asegurarse de que las fechas no sean NaT antes de comparar
+                        if pd.notna(fecha_down_principal) and pd.notna(fecha_down_backup) and \
+                            pd.notna(fecha_up_principal) and pd.notna(fecha_up_backup):
 
-                            # Si el estado del backup es 'Caido y Recuperado', cambiar a 'reboot'
-                            if backup_row['Estado'] == 'Caido y Recuperado':
-                                data_adjusted.at[j, 'Estado'] = 'reboot'  # Cambiar el estado del backup a 'reboot'
-                                print(f"El estado del enlace backup '{backup_row['Enlace']}' se cambió a 'reboot'.")
-                
-                
+                            # Comparar las fechas de down y up entre el principal y el backup con un margen de tiempo
+                            if (np.abs(fecha_down_principal - fecha_down_backup) <= time_margin) and \
+                            (np.abs(fecha_up_principal - fecha_up_backup) <= time_margin):
 
+                                # Si el estado del backup es 'Caido y Recuperado', cambiar a 'reboot'
+                                if backup_row['Estado'] == 'Caido y Recuperado':
+                                    data_adjusted.at[j, 'Estado'] = 'reboot'  # Cambiar el estado del backup a 'reboot'
+                                    print(f"El estado del enlace backup '{backup_row['Enlace']}' se cambió a 'reboot'.")
+        if group['Proveedor'].nunique() > 1:  # Más de un proveedor para la misma agencia
+            #print("###Mas de un proveedor para la misma agencia")
+            #print(group.head(20))
+            for i, row in group.iterrows():
+                # Buscar entradas similares dentro del grupo
+                similar_entries = group[
+                    (np.abs(group['Fecha Down'] - row['Fecha Down']) <= time_margin) &
+                    (np.abs(group['Fecha Up'] - row['Fecha Up']) <= time_margin) &
+                    (group['Proveedor'] != row['Proveedor'])
+                ]
+                
+                # Si hay entradas similares y el estado actual no es 'reboot' pero otra entrada sí lo es
+                if not similar_entries.empty:
+                    if 'reboot' in similar_entries['Estado'].values and row['Estado'] != 'reboot':
+                        data_adjusted.loc[i, 'Estado'] = 'reboot'
     # Reiniciar el índice del DataFrame ajustado
     data_adjusted.reset_index(drop=True, inplace=True)
 
@@ -1227,6 +1243,7 @@ def main(chat_id):
     dataframe_toimag(df_final,filename="Reporte.png")
     archivo = "Reporte.xlsx"
     df_final=corregir_estados_reboot(df_final)
+    # df_final =corregir_estados_reboot_ag(df_final)
     df_final.to_excel(archivo,index=False)
   
 
@@ -1279,6 +1296,7 @@ def main_personal(chat_id):
     df_final.info()
     df_final = clean_column(df_final, "Enlace")
     df_final=corregir_estados_reboot(df_final)
+    # df_final=corregir_estados_reboot_ag(df_final)
     fecha_actual = datetime.date.today().strftime('%d/%m/%Y')
     daily = f'ReporteDiario{str(fecha_actual).replace("/","-")}.xlsx'
     df_final.reset_index(drop=True, inplace=True)
@@ -1341,6 +1359,7 @@ def main_personal_calendario_dia(chat_id,fecha):
     time.sleep(2)
     df_final = clean_column(df_final, "Enlace")
     df_final=corregir_estados_reboot(df_final)
+    # df_final=corregir_estados_reboot_ag(df_final)
     archivo = f'Reporte{str(fecha).replace("/","-")}.xlsx'
     df_final.to_excel(archivo,index=False)
     df_final.reset_index(drop=True, inplace=True)
@@ -1388,6 +1407,7 @@ def main_personal_calendario_noche(chat_id,fecha):
     time.sleep(2)
     df_final = clean_column(df_final, "Enlace")
     df_final=corregir_estados_reboot(df_final)
+    # df_final=corregir_estados_reboot_ag(df_final)
     df_final.reset_index(drop=True, inplace=True)
     archivo = f'ReporteMadrugada{str(fecha).replace("/","-")}.xlsx'
     df_final.to_excel(archivo,index=False)
@@ -1434,6 +1454,7 @@ def main_mes(chat_id,fechaI,fechaF):
     rag = str(f"{fechaI} - {fechaF}")
     df_final = clean_column(df_final, "Enlace")
     df_final=corregir_estados_reboot(df_final)
+    # df_final=corregir_estados_reboot_ag(df_final)
     archivo = f'Reporte{str(rag).replace("/","-")}.xlsx'
     df_final.reset_index(drop=True, inplace=True)
     df_final.to_excel(archivo,index=False)
