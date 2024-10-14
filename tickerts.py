@@ -33,8 +33,8 @@ url = 'https://10.1.231.243/orion/netperfmon/events.aspx'
 ROOT_DIR ="C:\\Users\\nicho\\OneDrive\\Documentos\\Gustavo\\ActivaciondeCheckPoint\\"
 smtp_server = "smtp.office365.com"
 smtp_port = 587
-smtp_user = "mcaalvar@pacifico.fin.ec"
-smtp_password = "Silimarina97."
+smtp_user = "ggcastil@pacifico.fin.ec"
+smtp_password = "fedAVR96oasis"
 correos = 'mcaalvar@pacifico.fin.ec,sgellibe@pacifico.fin.ec,wdjara@pacifico.fin.ec,cpcampos@pacifico.fin.ec,frevelo@pacifico.fin.ec,ajsuarez@pacifico.fin.ec,ggcastil@pacifico.fin.ec'
 correos = correos.split(",")
 
@@ -333,7 +333,7 @@ def main_personal():
     browser = iniciar_navegador(chrome_options,url)
 
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", "Silimarina97.")
+    login_navegador(browser, "ggcastil@pacifico", "fedAVR96oasis")
 
     fecha_inicio = input("Ingrese la fecha DD/MM/AAAA")
     

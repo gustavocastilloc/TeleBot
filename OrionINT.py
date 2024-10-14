@@ -43,9 +43,9 @@ url = 'https://192.168.10.31/orion/netperfmon/events.aspx'
 ROOT_DIR ="c:\\Users\\nicho\\OneDrive\\Escritorio\\Proyectos\\ActivaciondeCheckPoint\\"
 smtp_server = "smtp.office365.com"
 smtp_port = 587
-smtp_user = "mcaalvar@pacifico.fin.ec"
-smtp_password = "Silimarina97."
-correos = 'mcaalvar@pacifico.fin.ec,sgellibe@pacifico.fin.ec,wdjara@pacifico.fin.ec,scastane@pacifico.fin.ec,cpcampos@pacifico.fin.ec,frevelo@pacifico.fin.ec,ajsuarez@pacifico.fin.ec'
+smtp_user = "ggcastil@pacifico.fin.ec"
+smtp_password = "fedAVR96oasis"
+correos = 'ggcastil@pacifico.fin.ec,mcaalvar@pacifico.fin.ec,sgellibe@pacifico.fin.ec,wdjara@pacifico.fin.ec,scastane@pacifico.fin.ec,cpcampos@pacifico.fin.ec,frevelo@pacifico.fin.ec,ajsuarez@pacifico.fin.ec'
 correos = correos.split(",")
 pathChrom= os.path.expanduser('~')+'\\AppData\\Local\\Google\\Chrome\\User Data\\telcombas'
 def configurar_chrome():

@@ -45,8 +45,8 @@ url = 'https://10.1.231.243/orion/netperfmon/events.aspx'
 ROOT_DIR ="c:\\Users\\nicho\\OneDrive\\Escritorio\\Proyectos\\ActivaciondeCheckPoint\\"
 smtp_server = "smtp.office365.com"
 smtp_port = 587
-smtp_user = "mcaalvar@pacifico.fin.ec"
-smtp_password = "Silimarina97."
+smtp_user = "ggcastil@pacifico.fin.ec"
+smtp_password = "fedAVR96oasis"
 correos = 'mcaalvar@pacifico.fin.ec,sgellibe@pacifico.fin.ec,wdjara@pacifico.fin.ec,scastane@pacifico.fin.ec,cpcampos@pacifico.fin.ec,frevelo@pacifico.fin.ec,ajsuarez@pacifico.fin.ec,ggcastil@pacifico.fin.ec'
 correos = correos.split(",")
 
@@ -900,7 +900,7 @@ def process_data_and_capture_screenshot_email(final, browserOrion):
 
 def crear_mensaje(correo_destino, fecha_actual, final):
     message = MIMEMultipart()
-    message['From'] = "mcaalvar@pacifico.fin.ec"
+    message['From'] = "ggcastil@pacifico.fin.ec"
     message['To'] = correo_destino.strip()
     message['Subject'] = f'INCIDENCIA DE ENLACE {fecha_actual} '
     #mensaje = f"Por favor revisar incidencia de este enlace \n \n {final['Enlace'].values} \n \n Capture adjunta en el correo"
@@ -1028,7 +1028,7 @@ def eventosCaidos(chat_id):
     browser = iniciar_navegador(chrome_options,"https://10.1.231.243/Orion/SummaryView.aspx?ViewID=1")
 
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", "Silimarina97.")
+    login_navegador(browser, "ggcastil@pacifico", "fedAVR96oasis")
     browserOrion = browser
     table_element = browserOrion.find_element(By.ID,"Resource1024_ctl00_ctl01_ResourceWrapper_resContent")
     screenshot = browserOrion.get_screenshot_as_png()
@@ -1222,7 +1222,7 @@ def main(chat_id):
     chrome_options = configurar_chrome()
     browser = iniciar_navegador(chrome_options,url)
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", smtp_password)
+    login_navegador(browser, "ggcastil@pacifico", smtp_password)
     # Seleccionar el periodo de tiempo
     fecha_inicio, hora_inicio, fecha_fin, hora_fin = periodo_hasta_ahora()  # o pedir_periodo()
     selecc_horario(browser, fecha_inicio, hora_inicio, fecha_fin, hora_fin)
@@ -1266,7 +1266,7 @@ def main_personal(chat_id):
     browser = iniciar_navegador(chrome_options,url)
 
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", smtp_password)
+    login_navegador(browser, "ggcastil@pacifico", smtp_password)
 
     # Seleccionar el periodo de tiempo
     fecha_inicio, hora_inicio, fecha_fin, hora_fin = periodo_hasta_ahora()  # o pedir_periodo()
@@ -1330,7 +1330,7 @@ def main_personal_calendario_dia(chat_id,fecha):
     browser = iniciar_navegador(chrome_options,url)
 
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", smtp_password)
+    login_navegador(browser, "ggcastil@pacifico", smtp_password)
     
     df= recolectar_datos_por_segmentos(browser,fecha)
     # Convertir la columna 'Fecha' a datetime
@@ -1379,7 +1379,7 @@ def main_personal_calendario_noche(chat_id,fecha):
     browser = iniciar_navegador(chrome_options,url)
 
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", smtp_password)
+    login_navegador(browser, "ggcastil@pacifico", smtp_password)
 
     df= recolectar_datos_nocturnos(browser,fecha)
     # Limpiar y procesar el dataframe
@@ -1425,7 +1425,7 @@ def main_mes(chat_id,fechaI,fechaF):
     browser = iniciar_navegador(chrome_options,url)
     horario = generar_horarios(fechaI,fechaF)
     # Iniciar sesión en el navegador
-    login_navegador(browser, "mcaalvar@pacifico", smtp_password)
+    login_navegador(browser, "ggcastil@pacifico", smtp_password)
 
     df= recolectar_datos_por_segmentos_mes(browser,horario)
     browser.close()
@@ -1499,7 +1499,3 @@ def dataframe_topdf(df, filename="Reporte.pdf"):
 
 if __name__ == "__main__":
     main()
-
-
-
-

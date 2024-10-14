@@ -15,8 +15,8 @@ import OrionINT
 TOKEN = '5899493789:AAE316Rks8Y21wV6VfDgznoJEdBKC4n8n-s'
 bot = telebot.TeleBot(TOKEN)
 usuarios_en_autenticacion = {}
-user = "mcaalvar"
-passw = "Silimarina97."
+user = "ggcastil"
+passw = "fedAVR96oasis"
 # DOMINIO = "sbp0100tcm14.pacifico.bpgf" 
 DOMINIO = "https://10.1.231.243/" 
 
@@ -135,7 +135,7 @@ def cambioUser(username, password):
 
 def defaultUser():
     global user, passw
-    user, passw = "mcaalvar", "Silimarina97."
+    user, passw = "ggcastil", "fedAVR96oasis"
 
 def delete_verification_images():
     for filename in os.listdir():
@@ -398,7 +398,3 @@ if __name__ == "__main__":
     thread_mejora = threading.Thread(target=execute_mejora_with_ping_check, daemon=True)
     restart_thread(thread_mejora)
     mainbot()
-    
-
-    
-
